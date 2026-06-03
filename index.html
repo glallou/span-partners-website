@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Span Partners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0b;
+    --bg2: #141310;
+    --surface: #1a1814;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0ece4;
+    --text-muted: rgba(240,236,228,0.45);
+    --text-dim: rgba(240,236,228,0.22);
+    --accent: #c9a96e;
+    --accent-soft: rgba(201,169,110,0.12);
+    --accent-dim: rgba(201,169,110,0.35);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px;
+    transition: background 0.4s, backdrop-filter 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(14,13,11,0.88);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 18px; font-weight: 400;
+    letter-spacing: 0.12em; color: var(--text); text-decoration: none; text-transform: uppercase;
+  }
+  .nav-right { display: flex; align-items: center; gap: 36px; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; font-weight: 400; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .lang-toggle {
+    display: flex; align-items: center;
+    border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .lang-btn {
+    background: none; border: none; padding: 6px 12px;
+    font-family: var(--sans); font-size: 10px; font-weight: 400;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted);
+    cursor: pointer; transition: background 0.2s, color 0.2s;
+  }
+  .lang-btn.active { background: var(--accent-soft); color: var(--accent); }
+  .lang-btn:hover:not(.active) { color: var(--text); }
+
+  /* HERO */
+  #hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 60px 80px; overflow: hidden;
+  }
+  .hero-line {
+    position: absolute; top: 0; bottom: 0; left: 50%; width: 1px;
+    background: var(--border); transform: scaleY(0); transform-origin: top;
+    animation: lineGrow 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  }
+  @keyframes lineGrow { to { transform: scaleY(1); } }
+  .hero-label {
+    font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 1s ease 0.8s forwards;
+  }
+  .hero-headline {
+    font-family: var(--serif); font-size: clamp(48px, 7vw, 96px);
+    font-weight: 300; line-height: 1.05; letter-spacing: -0.01em; max-width: 860px;
+    opacity: 0; animation: fadeUp 1s ease 1s forwards;
+  }
+  .hero-headline em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    margin-top: 32px; max-width: 580px; font-size: 14px; font-weight: 300;
+    color: var(--text-muted); line-height: 1.8;
+    opacity: 0; animation: fadeUp 1s ease 1.2s forwards;
+  }
+  .hero-prop {
+    margin-top: 28px; max-width: 580px; font-size: 13px; font-weight: 300;
+    color: var(--text-dim); line-height: 1.8; border-left: 1px solid var(--accent-dim);
+    padding-left: 20px;
+    opacity: 0; animation: fadeUp 1s ease 1.4s forwards;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 80px; right: 60px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+    opacity: 0; animation: fadeIn 1s ease 1.8s forwards;
+  }
+  .hero-scroll::before {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--text-dim);
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* SECTIONS */
+  section { position: relative; padding: 120px 60px; border-top: 1px solid var(--border); }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: 56px; }
+
+  /* CONSTAT */
+  #constat .headline {
+    font-family: var(--serif); font-size: clamp(32px, 4.5vw, 58px);
+    font-weight: 300; line-height: 1.15; max-width: 780px; margin-bottom: 32px;
+  }
+  #constat .headline em { font-style: italic; color: var(--accent); }
+  #constat .intro {
+    font-size: 14px; color: var(--text-muted); line-height: 1.9;
+    max-width: 660px; margin-bottom: 72px;
+  }
+  .waves-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 0; }
+  .wave-item { background: var(--bg); padding: 40px 36px; transition: background 0.3s; }
+  .wave-item:hover { background: var(--surface); }
+  .wave-num { font-family: var(--serif); font-size: 11px; letter-spacing: 0.2em; color: var(--text-dim); margin-bottom: 16px; text-transform: uppercase; }
+  .wave-title { font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.3; margin-bottom: 20px; }
+  .wave-timing { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+
+  /* NOS FORCES */
+  #forces .forces-lead {
+    font-family: var(--serif); font-size: clamp(28px, 3.5vw, 46px);
+    font-weight: 300; line-height: 1.2; max-width: 720px; margin-bottom: 80px;
+  }
+  .forces-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  .force-block { border-top: 1px solid var(--border); padding-top: 32px; }
+  .force-icon { font-family: var(--serif); font-size: 36px; font-weight: 300; color: var(--accent-dim); line-height: 1; margin-bottom: 24px; }
+  .force-title { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); margin-bottom: 16px; }
+  .force-text { font-size: 13px; color: var(--text-muted); line-height: 1.9; }
+
+  /* CE QUE NOUS RECHERCHONS */
+  #recherchons { background: var(--bg2); }
+  .recherchons-headline {
+    font-family: var(--serif); font-size: clamp(28px, 3.8vw, 48px);
+    font-weight: 300; line-height: 1.2; max-width: 720px; margin-bottom: 56px;
+  }
+  .recherchons-headline em { font-style: italic; color: var(--accent); }
+  .recherchons-list { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+  .recherchons-list li {
+    background: var(--bg2); padding: 32px 36px;
+    font-size: 14px; color: var(--text-muted); line-height: 1.8;
+    transition: background 0.3s;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .recherchons-list li:hover { background: var(--surface); }
+  .recherchons-list li::before {
+    content: '—'; color: var(--accent); flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* APPROCHE */
+  #approche .approche-top {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 80px; align-items: start;
+  }
+  .approche-headline { font-family: var(--serif); font-size: clamp(30px, 3.8vw, 50px); font-weight: 300; line-height: 1.15; }
+  .approche-headline em { font-style: italic; color: var(--accent); }
+  .approche-body { font-size: 14px; color: var(--text-muted); line-height: 1.9; padding-top: 8px; }
+  .approche-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .step { background: var(--bg); padding: 36px 32px; transition: background 0.3s; }
+  .step:hover { background: var(--surface); }
+  .step-num { font-family: var(--serif); font-size: 40px; font-weight: 300; color: var(--accent-dim); line-height: 1; margin-bottom: 20px; }
+  .step-title { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text); margin-bottom: 12px; }
+  .step-text { font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+
+  /* CONTACT */
+  #contact { text-align: center; padding: 140px 60px; }
+  .contact-label { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: 40px; }
+  .contact-headline { font-family: var(--serif); font-size: clamp(36px, 5.5vw, 72px); font-weight: 300; line-height: 1.1; max-width: 700px; margin: 0 auto 56px; }
+  .contact-headline em { font-style: italic; color: var(--accent); }
+  .contact-btn {
+    display: inline-block; padding: 18px 48px; border: 1px solid var(--accent-dim);
+    font-family: var(--sans); font-size: 11px; font-weight: 400; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent); text-decoration: none;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .contact-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .contact-note { margin-top: 32px; font-size: 12px; color: var(--text-dim); letter-spacing: 0.06em; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 32px 60px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: var(--serif); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+  .footer-copy { font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* i18n */
+  [data-lang] { display: none; }
+  .lang-fr [data-lang="fr"] { display: block; }
+  .lang-en [data-lang="en"] { display: block; }
+  span[data-lang], em[data-lang], a[data-lang] { display: none; }
+  .lang-fr span[data-lang="fr"], .lang-fr em[data-lang="fr"], .lang-fr a[data-lang="fr"] { display: inline; }
+  .lang-en span[data-lang="en"], .lang-en em[data-lang="en"], .lang-en a[data-lang="en"] { display: inline; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 22px 28px; }
+    .nav-links { display: none; }
+    #hero { padding: 0 28px 64px; }
+    section { padding: 80px 28px; }
+    .waves-grid { grid-template-columns: 1fr; }
+    .forces-cols { grid-template-columns: 1fr; gap: 36px; }
+    .recherchons-list { grid-template-columns: 1fr; }
+    #approche .approche-top { grid-template-columns: 1fr; gap: 40px; }
+    .approche-steps { grid-template-columns: repeat(2, 1fr); }
+    footer { padding: 24px 28px; flex-direction: column; gap: 12px; text-align: center; }
+    #contact { padding: 100px 28px; }
+  }
+</style>
+</head>
+<body class="lang-fr">
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Span Partners</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#constat"><span data-lang="fr">Le constat</span><span data-lang="en">The case</span></a></li>
+      <li><a href="#forces"><span data-lang="fr">Nos forces</span><span data-lang="en">Our edge</span></a></li>
+      <li><a href="#approche"><span data-lang="fr">Notre approche</span><span data-lang="en">Our approach</span></a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('fr')" id="btn-fr">FR</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-line"></div>
+
+  <p class="hero-label">European Creator Brands</p>
+
+  <h1 class="hero-headline">
+    <span data-lang="fr">Les créateurs construisent l'audience. <em>Nous construisons la marque.</em></span>
+    <span data-lang="en">Creators build the audience. <em>We build the brand.</em></span>
+  </h1>
+
+  <p class="hero-prop">
+    <span data-lang="fr">Nous cofondons et développons des marques avec des créateurs européens, en apportant capital, infrastructure et exécution opérationnelle.</span>
+    <span data-lang="en">We co-found and grow brands with European creators, bringing capital, infrastructure, and operational execution.</span>
+  </p>
+
+  <div class="hero-scroll">
+    <span data-lang="fr">Défiler</span>
+    <span data-lang="en">Scroll</span>
+  </div>
+</section>
+
+<!-- LE CONSTAT -->
+<section id="constat">
+  <div class="section-inner">
+    <p class="section-tag reveal"><span data-lang="fr">Le constat</span><span data-lang="en">The case</span></p>
+
+    <h2 class="headline reveal reveal-delay-1">
+      <span data-lang="fr">Les consommateurs d'aujourd'hui redéfinissent la façon dont les marques wellness se construisent, <em>se distribuent et se racontent.</em></span>
+      <span data-lang="en">Today's consumers are reshaping how wellness brands are built, <em>marketed, and distributed.</em></span>
+    </h2>
+
+    <p class="intro reveal reveal-delay-2">
+      <span data-lang="fr">Pendant deux décennies, les grandes marques wellness ont été construites grâce à la distribution physique et à des budgets marketing importants. Aujourd'hui, la confiance se construit au sein des communautés, la distribution est accessible et l'intelligence artificielle réduit les barrières opérationnelles. Une nouvelle génération de marques peut émerger avec des équipes plus petites, plus rapides et plus proches de leurs audiences.</span>
+      <span data-lang="en">For two decades, major wellness brands were built on physical distribution and large marketing budgets. Today, trust is built within communities, distribution is accessible, and AI reduces operational barriers. A new generation of brands can emerge with smaller, faster teams that are closer to their audiences.</span>
+    </p>
+
+    <div class="waves-grid reveal reveal-delay-3">
+      <div class="wave-item">
+        <p class="wave-num"><span data-lang="fr">Force 01</span><span data-lang="en">Force 01</span></p>
+        <h3 class="wave-title"><span data-lang="fr">Culture & authenticité</span><span data-lang="en">Culture & authenticity</span></h3>
+        <p class="wave-timing">
+          <span data-lang="fr">Les consommateurs font davantage confiance aux personnes qu'aux institutions. Les marques les plus fortes naissent désormais d'une proximité réelle avec leur communauté.</span>
+          <span data-lang="en">Consumers trust people more than institutions. The strongest brands now emerge from genuine proximity to their community.</span>
+        </p>
+      </div>
+      <div class="wave-item">
+        <p class="wave-num"><span data-lang="fr">Force 02</span><span data-lang="en">Force 02</span></p>
+        <h3 class="wave-title"><span data-lang="fr">Communauté & distribution</span><span data-lang="en">Community & distribution</span></h3>
+        <p class="wave-timing">
+          <span data-lang="fr">Les gagnants de ce cycle émergent à l'intersection d'une voix authentique, d'une audience engagée et d'une distribution structurée.</span>
+          <span data-lang="en">The winners of this cycle emerge at the intersection of an authentic voice, an engaged audience, and structured distribution.</span>
+        </p>
+      </div>
+      <div class="wave-item">
+        <p class="wave-num"><span data-lang="fr">Force 03</span><span data-lang="en">Force 03</span></p>
+        <h3 class="wave-title"><span data-lang="fr">Infrastructure AI-native</span><span data-lang="en">AI-native infrastructure</span></h3>
+        <p class="wave-timing">
+          <span data-lang="fr">L'IA réduit radicalement le coût de création, d'acquisition et d'opération. Des équipes compactes peuvent désormais construire des marques qui nécessitaient auparavant des ressources considérables.</span>
+          <span data-lang="en">AI radically reduces the cost of creation, acquisition, and operations. Compact teams can now build brands that previously required considerable resources.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOS FORCES -->
+<section id="forces">
+  <div class="section-inner">
+    <p class="section-tag reveal"><span data-lang="fr">Nos forces</span><span data-lang="en">Our edge</span></p>
+
+    <h2 class="forces-lead reveal reveal-delay-1">
+      <span data-lang="fr">L'alliance entre l'exécution entrepreneuriale et la discipline de l'investissement.</span>
+      <span data-lang="en">The alliance between entrepreneurial execution and investment discipline.</span>
+    </h2>
+
+    <div class="forces-cols">
+      <div class="force-block reveal reveal-delay-1">
+        <div class="force-icon">I.</div>
+        <h3 class="force-title"><span data-lang="fr">Serial entrepreneur</span><span data-lang="en">Serial entrepreneur</span></h3>
+        <p class="force-text">
+          <span data-lang="fr">Construction de produits, lancement de marques, acquisition client et gestion opérationnelle : l'expérience du terrain nécessaire pour transformer une idée en entreprise durable.</span>
+          <span data-lang="en">Product building, brand launching, client acquisition, and operational management: the hands-on experience needed to turn an idea into a lasting business.</span>
+        </p>
+      </div>
+      <div class="force-block reveal reveal-delay-2">
+        <div class="force-icon">II.</div>
+        <h3 class="force-title"><span data-lang="fr">Professionnel de l'investissement</span><span data-lang="en">Investment professional</span></h3>
+        <p class="force-text">
+          <span data-lang="fr">Plus d'une décennie de transactions, de structuration et de création de valeur. La discipline financière, stratégique et opérationnelle permettant de piloter une marque avec la rigueur d'un actif — jusqu'à une opération de liquidité.</span>
+          <span data-lang="en">Over a decade of transactions, structuring, and value creation. The financial, strategic, and operational discipline to manage a brand with the rigor of an asset — through to a liquidity event.</span>
+        </p>
+      </div>
+      <div class="force-block reveal reveal-delay-3">
+        <div class="force-icon">III.</div>
+        <h3 class="force-title">AI-native</h3>
+        <p class="force-text">
+          <span data-lang="fr">Chaque marque est conçue autour d'une infrastructure AI-native dès le premier jour. Création de contenu, acquisition, relation client et opérations : nous automatisons ce qui peut l'être afin de concentrer les ressources sur le produit, la marque et la communauté.</span>
+          <span data-lang="en">Every brand is built around an AI-native infrastructure from day one. Content creation, acquisition, customer relations, and operations: we automate what can be automated to focus resources on product, brand, and community.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTRE APPROCHE -->
+<section id="approche">
+  <div class="section-inner">
+    <p class="section-tag reveal"><span data-lang="fr">Notre approche</span><span data-lang="en">Our approach</span></p>
+
+    <div class="approche-top reveal reveal-delay-1">
+      <h2 class="approche-headline">
+        <span data-lang="fr">Audience + exécution = <em>marque.</em></span>
+        <span data-lang="en">Audience + execution = <em>brand.</em></span>
+      </h2>
+      <p class="approche-body">
+        <span data-lang="fr">Les créateurs possèdent quelque chose de rare : l'attention et la confiance. Nous apportons le produit, l'infrastructure, le capital et l'exécution. Ensemble, nous construisons des marques dont la création de valeur est partagée.</span>
+        <span data-lang="en">Creators possess something rare: attention and trust. We bring product, infrastructure, capital, and execution. Together, we build brands whose value creation is shared.</span>
+      </p>
+    </div>
+
+    <div class="approche-steps reveal reveal-delay-2">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3 class="step-title"><span data-lang="fr">Identifier</span><span data-lang="en">Identify</span></h3>
+        <p class="step-text">
+          <span data-lang="fr">Une catégorie où les dynamiques de marché sont favorables. Une audience engagée dont la confiance est déjà établie.</span>
+          <span data-lang="en">A category with favorable market dynamics. An engaged audience whose trust is already established.</span>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3 class="step-title"><span data-lang="fr">Construire</span><span data-lang="en">Build</span></h3>
+        <p class="step-text">
+          <span data-lang="fr">Développer un produit Hero, une identité de marque forte et les fondations opérationnelles nécessaires à la croissance.</span>
+          <span data-lang="en">Develop a Hero product, a strong brand identity, and the operational foundations needed for growth.</span>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3 class="step-title"><span data-lang="fr">Scaler</span><span data-lang="en">Scale</span></h3>
+        <p class="step-text">
+          <span data-lang="fr">Déployer la marque à l'échelle européenne en s'appuyant sur une infrastructure mutualisée.</span>
+          <span data-lang="en">Deploy the brand across Europe, leveraging shared infrastructure.</span>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3 class="step-title">Exit</h3>
+        <p class="step-text">
+          <span data-lang="fr">Entrée d'un investisseur financier ou cession industrielle. Une valeur créée et partagée ensemble.</span>
+          <span data-lang="en">Financial investor entry or strategic sale. Value created and shared together.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CE QUE NOUS RECHERCHONS -->
+<section id="recherchons">
+  <div class="section-inner">
+    <p class="section-tag reveal"><span data-lang="fr">Ce que nous recherchons</span><span data-lang="en">What we look for</span></p>
+
+    <h2 class="recherchons-headline reveal reveal-delay-1">
+      <span data-lang="fr">Nous nous associons à des créateurs qui souhaitent transformer une audience engagée <em>en une entreprise durable.</em></span>
+      <span data-lang="en">We partner with creators who want to turn an engaged audience <em>into a lasting business.</em></span>
+    </h2>
+
+    <ul class="recherchons-list reveal reveal-delay-2">
+      <li><span data-lang="fr">Une audience fidèle et active</span><span data-lang="en">A loyal and active audience</span></li>
+      <li><span data-lang="fr">Une expertise ou une crédibilité forte dans leur catégorie</span><span data-lang="en">Strong expertise or credibility in their category</span></li>
+      <li><span data-lang="fr">Une ambition entrepreneuriale de long terme</span><span data-lang="en">Long-term entrepreneurial ambition</span></li>
+      <li><span data-lang="fr">Une volonté de construire aux côtés d'un partenaire opérationnel</span><span data-lang="en">A willingness to build alongside an operational partner</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <p class="contact-label reveal">Contact</p>
+    <h2 class="contact-headline reveal reveal-delay-1">
+      <span data-lang="fr">Vous construisez une <em>audience.</em><br>Nous construisons une marque.</span>
+      <span data-lang="en">You build an <em>audience.</em><br>We build a brand.</span>
+    </h2>
+    <a href="mailto:contact@span-partners.com" class="contact-btn reveal reveal-delay-2">
+      <span data-lang="fr">Prendre contact</span>
+      <span data-lang="en">Get in touch</span>
+    </a>
+    <p class="contact-note reveal reveal-delay-3">contact@span-partners.com</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Span Partners</span>
+  <span class="footer-copy">
+    <span data-lang="fr">© 2026 Span Partners. Confidentiel.</span>
+    <span data-lang="en">© 2026 Span Partners. Confidential.</span>
+  </span>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  function setLang(lang) {
+    document.body.classList.remove('lang-fr', 'lang-en');
+    document.body.classList.add('lang-' + lang);
+    document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.documentElement.lang = lang;
+  }
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
